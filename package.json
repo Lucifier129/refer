@@ -1,0 +1,63 @@
+{
+  "name": "refer",
+  "version": "0.0.1",
+  "description": "redux-like library for handling global state on functional style",
+  "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel/register --recursive",
+    "test:watch": "npm test -- --watch",
+    "build:umd": "webpack src/index.js dist/refer.js --config webpack.config.development.js",
+    "build:umd:min": "webpack src/index.js dist/refer.min.js --config webpack.config.production.js",
+    "build": "npm run build:umd && npm run build:umd:min",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lucifier129/refer.git"
+  },
+  "keywords": [
+    "refer",
+    "reducer",
+    "state",
+    "predictable",
+    "functional",
+    "immutable",
+    "hot",
+    "live",
+    "replay",
+    "flux"
+  ],
+  "author": "Jade Gu <guyingjie129@163.com> (https://github.com/Lucifier129)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Lucifier129/refer/issues"
+  },
+  "homepage": "https://github.com/Lucifier129/refer",
+  "devDependencies": {
+    "babel": "^5.5.8",
+    "babel-core": "^5.6.18",
+    "babel-eslint": "^3.1.15",
+    "babel-loader": "^5.1.4",
+    "contextify": "^0.1.14",
+    "eslint": "^0.23",
+    "eslint-config-airbnb": "0.0.6",
+    "eslint-plugin-react": "^2.3.0",
+    "expect": "^1.8.0",
+    "gitbook-cli": "^0.3.4",
+    "isparta": "^3.0.3",
+    "mocha": "^2.2.5",
+    "rimraf": "^2.3.4",
+    "webpack": "^1.9.6",
+    "webpack-dev-server": "^1.8.2"
+  },
+  "npmName": "refer",
+  "npmFileMap": [
+    {
+      "basePath": "/dist/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ]
+}
