@@ -1,10 +1,10 @@
-import createDispatche from './createDispatche'
+import createDispatch from './createDispatch'
 import createStore from './createStore'
-import combineReducers from './combineReducers'
+import combineHandlers from './combineHandlers'
 
 
 export default {
-    createDispatche,
+    createDispatch,
     createStore,
-    combineReducers
+    combineHandlers
 }

@@ -1,21 +1,32 @@
-import { isThenable, isFn } from './types'
+import { isThenable, isFn, isObj } from './types'
 
-let createStore = (reducer, initialState = {}) => {
+let createStore = (rootDisaptch, initialState = {}) => {
 
-	if (isFn(reducer)) {
-		throw new Error('Expected the reducer to be a function.')
+	if (!isFn(rootDisaptch)) {
+		throw new Error('Expected the rootDisaptch to be a function.')
 	}
-
-	let currentState = initialState
-	let currentReducer = reducer
-	let getState = () => currentState
-	let replaceState = nextState => currentState = nextState
 
 	let listeners = []
 	let subscribe = listener => {
 		let index = listeners.length
 		listeners.push(listener)
-		return () => listeners.splice(index, 1)
+		return () => {
+			let index = listeners.indexOf(listener)
+			if (index !== -1) {
+				listeners.splice(index, 1)
+			}
+		}
+	}
+
+	let currentState = initialState
+	let getState = () => currentState
+	let replaceState = nextState => {
+		if (!isObj(nextState)) {
+			throw new Error(`The next state must be a object type, not ${ nextState }`)
+		}
+		currentState = nextState
+		listeners.forEach(listener => listener())
+		return currentState
 	}
 
 	let isDispatching = false
@@ -27,23 +38,12 @@ let createStore = (reducer, initialState = {}) => {
 		let nextState
 		try {
 	      isDispatching = true
-	      nextState = currentReducer(key, value)
+	      nextState = rootDisaptch(key, value)(getState)
 	    } finally {
 	      isDispatching = false
 	    }
 
-	    if (isThenable(nextState)) {
-	    	return nextState.then(result => {
-	    		currentState = result
-	    		listeners.forEach(listener => listener())
-	    		return currentState
-	    	})
-	    }
-
-	    currentState = nextState
-	    listeners.forEach(listener => listener())
-
-	    return currentState
+	    return isThenable(nextState) ? nextState.then(replaceState) : replaceState(nextState)
 	}
 
 	return {

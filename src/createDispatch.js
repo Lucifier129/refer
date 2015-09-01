@@ -2,25 +2,36 @@ import { isObj, isArr, isFn, isStr, isNum, isThenable } from './types'
 import mapValues from './mapValues'
 
 let createDispatche = table => {
+	if (!isObj(table)) {
+		throw new Error(`createDispatche need an object type parameter, not ${ table }`)
+	}
 	let dispatch = (key, value) => {
-		let handler = table[key]
+		let handler
+		
 		switch (true) {
 		case key == null:
 			throw new Error(`The key ${ key } in dispatch(key, value) is illegal`)
-		case isObj(key):
-			return mapValues(key, (value, key) => dispatch(key, value))
+		case isFn(key) || isArr(key) || isThenable(key) || isObj(key):
+			handler = key
+			break
+		default:
+			handler = table[key]
+		}
+
+		switch (true) {
 		case isFn(handler):
 			return handler(value)
 		case isStr(handler) || isNum(handler):
 			return dispatch(handler, value)
 		case isArr(handler):
-			return dispatchOnList(handler)
+			return dispatchOnList(handler, value)
 		case isThenable(handler):
 			return handler.then(asyncHandler => dispatch(asyncHandler, value))
 		case isObj(handler):
-			return mapValues(handler, item => dispatch(item, value) )
+			return mapValues(handler, item => dispatch(item, value))
+		default:
+			return value
 		}
-		return value
 	}
 
 	let dispatchOnList = (handlers, value) => {
