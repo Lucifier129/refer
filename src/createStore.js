@@ -30,6 +30,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	}
 
 	let isDispatching = false
+	let updater = update => update(currentState)
 	let dispatch = (key, value) => {
 		if (isDispatching) {
 	      throw new Error('reducer may not dispatch actions.');
@@ -38,7 +39,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 		let nextState
 		try {
 	      isDispatching = true
-	      nextState = rootDisaptch([key, update => update(currentState)], value)
+	      nextState = rootDisaptch([key, updater], value)
 	    } finally {
 	      isDispatching = false
 	    }
