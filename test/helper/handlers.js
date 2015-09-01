@@ -38,30 +38,26 @@ let collector = {
 }
 
 let transformer = {
-	[ADD_ITEM]: item => getState => {
-		let state = getState()
+	[ADD_ITEM]: item => state => {
 		return {
 			...state,
 			todos: [item, ...state.todos]
 		}
 	},
-	[DELETE_ITEM]: query => getState => {
-		let state = getState()
+	[DELETE_ITEM]: query => state => {
 		return {
 			...state,
 			todos: filterItems(query, state.todos)
 		}
 	},
 	[DELETE_ITEMS]: DELETE_ITEM,
-	[UPDATE_ITEM]: source => getState => {
-		let state = getState()
+	[UPDATE_ITEM]: source => state => {
 		return {
 			...state,
 			todos: updateItem(source, state.todos)
 		}
 	},
-	[UPDATE_ITEMS]: source => getState => {
-		let state = getState()
+	[UPDATE_ITEMS]: source => state => {
 		return {
 			...state,
 			todos: state.todos.map(item => Object.assign({}, item, source))

@@ -38,7 +38,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 		let nextState
 		try {
 	      isDispatching = true
-	      nextState = rootDisaptch(key, value)(getState)
+	      nextState = rootDisaptch([key, update => update(currentState)], value)
 	    } finally {
 	      isDispatching = false
 	    }
