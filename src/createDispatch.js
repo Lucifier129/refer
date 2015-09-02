@@ -1,15 +1,16 @@
 import { isObj, isArr, isFn, isStr, isNum, isThenable } from './types'
+import { ERROR_KEY } from './constants'
 import mapValues from './mapValues'
 
 let createDispatche = table => {
 	if (!isObj(table)) {
-		throw new Error(`createDispatche need an object type parameter, not ${ table }`)
+		throw new Error(ERROR_KEY['001'])
 	}
 	let dispatch = (key, value) => {
 		let handler
 		switch (true) {
 		case key == null:
-			throw new Error(`The key ${ key } in dispatch(key, value) is illegal`)
+			throw new Error(ERROR_KEY['002'])
 		case isFn(key) || isArr(key) || isThenable(key) || isObj(key):
 			handler = key
 			break
@@ -34,7 +35,6 @@ let createDispatche = table => {
 			return value
 		}
 	}
-
 	let dispatchOnList = (handlers, value) => {
 		for (var i = 0, len = handlers.length; i < len; i++) {
 			value = dispatch(handlers[i], value)

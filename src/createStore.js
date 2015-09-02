@@ -1,5 +1,7 @@
 import { isThenable, isFn, isObj } from './types'
-import { 
+import { LIFE_CYCLE, ERROR_KEY } from './constants'
+
+let { 
 	SHOULD_DISPATCH,
 	DISPATCH,
 	WILL_UPDATE,
@@ -9,11 +11,11 @@ import {
 	ASYNC_START,
 	ASYNC_END,
 	SYNC
-} from './constants'
+} = LIFE_CYCLE
 
 let createStore = (rootDisaptch, initialState = {}) => {
 	if (!isFn(rootDisaptch)) {
-		throw new Error('Expected the rootDisaptch to be a function.')
+		throw new Error(ERROR_KEY['004'])
 	}
 
 	let listeners = []
@@ -32,7 +34,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	let getNextState = f => f(currentState)
 	let replaceState = nextState => {
 		if (!isObj(nextState)) {
-			throw new Error(`The next state must be a object type, not ${ nextState }`)
+			throw new Error(ERROR_KEY['005'])
 		}
 		currentState = nextState
 		listeners.forEach(listener => listener())
@@ -53,11 +55,10 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	let isDispatching = false
 	let dispatch = (key, value) => {
 		if (isDispatching) {
-			throw new Error('handler may not dispatch anything.')
+			throw new Error(ERROR_KEY['006'])
 		}
 
 		let currentData = { currentState, key, value }
-
 		if (rootDisaptch(SHOULD_DISPATCH, currentData) === false) {
 			return currentState
 		}

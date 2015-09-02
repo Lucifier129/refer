@@ -4,7 +4,8 @@ import handlers from './helper/handlers'
 import { ADD_ITEM, DELETE_ITEM, DELETE_ITEMS, UPDATE_ITEM, UPDATE_ITEMS } from './helper/constants'
 
 
-let { WILL_UPDATE, DID_UPDATE, SHOULD_DISPATCH, SHOULD_UPDATE, THROW_ERROR } = constants
+let { ERROR_KEY, LIFE_CYCLE } = constants
+let { WILL_UPDATE, DID_UPDATE, SHOULD_DISPATCH, SHOULD_UPDATE, THROW_ERROR } = LIFE_CYCLE
 
 let getStore = (...middlewares) => {
 	let rootDispatch = combineHandlers(...handlers.concat(middlewares))
