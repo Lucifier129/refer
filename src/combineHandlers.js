@@ -1,6 +1,6 @@
 import createDispatch from './createDispatch'
 
-export default function combineHandlers(...handlers) {
+export default (...handlers) => {
 	let rootHandler = {}
 	let addItem = dispatch => key => {
 		if (!rootHandler[key]) {

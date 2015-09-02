@@ -2,7 +2,6 @@ import { isThenable, isFn, isObj } from './types'
 import { SHUOLD_DISPATCH, DISPATCH, WILL_UPDATE, SHUOLD_UPDATE, DID_UPDATE, THROW_ERROR } from './constants'
 
 let createStore = (rootDisaptch, initialState = {}) => {
-
 	if (!isFn(rootDisaptch)) {
 		throw new Error('Expected the rootDisaptch to be a function.')
 	}
@@ -53,13 +52,13 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 		let nextState
 		try {
-	      isDispatching = true
-	      nextState = rootDisaptch([key, getNextState], value)
-	    } catch(error) {
-	    	rootDisaptch(THROW_ERROR, error)
+			isDispatching = true
+			nextState = rootDisaptch([key, getNextState], value)
+		} catch(error) {
+			rootDisaptch(THROW_ERROR, error)
 	    	return currentState
 	    } finally {
-	      isDispatching = false
+	    	isDispatching = false
 	    }
 
 	    if (isThenable(nextState)) {
