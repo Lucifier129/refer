@@ -18,7 +18,6 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 	let listeners = []
 	let subscribe = listener => {
-		let index = listeners.length
 		listeners.push(listener)
 		return () => {
 			let index = listeners.indexOf(listener)
@@ -71,8 +70,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 			isDispatching = true
 			nextState = rootDisaptch([key, getNextState], value)
 		} catch(error) {
-			rootDisaptch(THROW_ERROR, error)
-	    	return currentState
+	    	return dispatchError(error)
 	    } finally {
 	    	isDispatching = false
 	    }
@@ -81,12 +79,10 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 	    if (isThenable(nextState)) {
 	    	rootDisaptch(ASYNC_START, data)
-	    	return nextState
-	    		.then(nextState => 
-	    			updateCurrentState(
-	    				rootDisaptch(ASYNC_END, { currentState, nextState, key, value })
-	    			)
-	    		, dispatchError)
+	    	return nextState.then(nextState =>
+	    		updateCurrentState(
+	    			rootDisaptch(ASYNC_END, { currentState, nextState, key, value })
+	    		), dispatchError)
 	    }
 	    return updateCurrentState(rootDisaptch(SYNC, data))
 	}

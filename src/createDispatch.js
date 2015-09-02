@@ -7,7 +7,6 @@ let createDispatche = table => {
 	}
 	let dispatch = (key, value) => {
 		let handler
-		
 		switch (true) {
 		case key == null:
 			throw new Error(`The key ${ key } in dispatch(key, value) is illegal`)

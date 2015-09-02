@@ -173,7 +173,7 @@ describe('test createStore.js', () => {
 
 		it('shuold throw en error if dispatch an nonexistent action key', () => {
 			let errorHandler = {
-				[THROW_ERROR]: error => expect(error.message.indexOf('string is not a function') !== -1).toBe(true)
+				[THROW_ERROR]: error => expect(error).toExist(true)
 			}
 			let { dispatch, getState } = getStore(errorHandler)
 			dispatch('abc', 'abc is not the right action key')
