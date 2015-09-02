@@ -19,6 +19,8 @@ let createDispatche = table => {
 		}
 
 		switch (true) {
+		case handler == null:
+			return value
 		case isFn(handler):
 			return handler(value)
 		case isStr(handler) || isNum(handler):
@@ -40,9 +42,7 @@ let createDispatche = table => {
 			if (isThenable(value)) {
 				return i === len - 1 ?
 				value :
-				value.then(result => 
-					dispatch(handlers.slice(i + 1), result)
-				)
+				value.then(result => dispatch(handlers.slice(i + 1), result))
             }
         }
         return value
