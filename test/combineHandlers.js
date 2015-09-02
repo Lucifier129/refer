@@ -1,4 +1,4 @@
-import combineHandlers from '../src/combineHandlers'
+import { combineHandlers } from '../src'
 import expect from 'expect'
 
 describe('test combineHandlers.js', () => {

@@ -1,4 +1,4 @@
-import createDispatch from '../src/createDispatch'
+import { createDispatch } from '../src'
 import expect from 'expect'
 
 describe('test createDispatch.js', () => {

@@ -1,7 +1,5 @@
-import combineHandlers from '../src/combineHandlers'
-import createStore from '../src/createStore'
+import { combineHandlers, createStore, constants } from '../src'
 import expect from 'expect'
-
 import handlers from './helper/handlers'
 import { ADD_ITEM, DELETE_ITEM, DELETE_ITEMS, UPDATE_ITEM, UPDATE_ITEMS } from './helper/constants'
 

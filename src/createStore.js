@@ -1,4 +1,5 @@
 import { isThenable, isFn, isObj } from './types'
+import { SHUOLD_DISPATCH, DISPATCH, WILL_UPDATE, SHUOLD_UPDATE, DID_UPDATE, THROW_ERROR } from './constants'
 
 let createStore = (rootDisaptch, initialState = {}) => {
 
@@ -20,6 +21,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 	let currentState = initialState
 	let getState = () => currentState
+	let getNextState = f => f(currentState)
 	let replaceState = nextState => {
 		if (!isObj(nextState)) {
 			throw new Error(`The next state must be a object type, not ${ nextState }`)
@@ -28,23 +30,46 @@ let createStore = (rootDisaptch, initialState = {}) => {
 		listeners.forEach(listener => listener())
 		return currentState
 	}
+	let updateCurrentState = data => {
+		if (rootDisaptch(SHUOLD_UPDATE, data) !== false) {
+			rootDisaptch(WILL_UPDATE, data)
+			replaceState(data.nextState)
+			rootDisaptch(DID_UPDATE, data)
+		}
+		return currentState
+	}
 
 	let isDispatching = false
-	let updater = update => update(currentState)
 	let dispatch = (key, value) => {
 		if (isDispatching) {
-	      throw new Error('reducer may not dispatch actions.');
-	    }
+			throw new Error('handler may not dispatch anything.')
+		}
+
+		if (rootDisaptch(SHUOLD_DISPATCH, { key, value }) === false) {
+			return currentState
+		}
+
+		rootDisaptch(DISPATCH, { key, value })
 
 		let nextState
 		try {
 	      isDispatching = true
-	      nextState = rootDisaptch([key, updater], value)
+	      nextState = rootDisaptch([key, getNextState], value)
+	    } catch(error) {
+	    	rootDisaptch(THROW_ERROR, error)
+	    	return currentState
 	    } finally {
 	      isDispatching = false
 	    }
 
-	    return isThenable(nextState) ? nextState.then(replaceState) : replaceState(nextState)
+	    if (isThenable(nextState)) {
+	    	return nextState
+	    		.then(next => updateCurrentState({ currentState, next, key, value }))
+	    		.catch(error => rootDisaptch(THROW_ERROR, error))
+	    } else {
+	    	return updateCurrentState({ currentState, nextState, key, value })
+	    }
+
 	}
 
 	return {
