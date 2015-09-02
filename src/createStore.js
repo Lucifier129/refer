@@ -1,9 +1,9 @@
 import { isThenable, isFn, isObj } from './types'
 import { 
-	SHUOLD_DISPATCH,
+	SHOULD_DISPATCH,
 	DISPATCH,
 	WILL_UPDATE,
-	SHUOLD_UPDATE,
+	SHOULD_UPDATE,
 	DID_UPDATE,
 	THROW_ERROR,
 	ASYNC_START,
@@ -40,10 +40,14 @@ let createStore = (rootDisaptch, initialState = {}) => {
 		return currentState
 	}
 	let updateCurrentState = data => {
-		if (rootDisaptch(SHUOLD_UPDATE, data) !== false) {
+		if (rootDisaptch(SHOULD_UPDATE, data) !== false) {
 			replaceState(data.nextState)
 			rootDisaptch(DID_UPDATE, data)
 		}
+		return currentState
+	}
+	let dispatchError = error => {
+		rootDisaptch(THROW_ERROR, error)
 		return currentState
 	}
 
@@ -55,7 +59,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 		let currentData = { currentState, key, value }
 
-		if (rootDisaptch(SHUOLD_DISPATCH, currentData) === false) {
+		if (rootDisaptch(SHOULD_DISPATCH, currentData) === false) {
 			return currentState
 		}
 
@@ -78,9 +82,11 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	    if (isThenable(nextState)) {
 	    	rootDisaptch(ASYNC_START, data)
 	    	return nextState
-	    		.then(next => rootDisaptch(ASYNC_END, { currentState, next, key, value }))
-	    		.then(updateCurrentState)
-	    		.catch(error => rootDisaptch(THROW_ERROR, error))
+	    		.then(nextState => 
+	    			updateCurrentState(
+	    				rootDisaptch(ASYNC_END, { currentState, nextState, key, value })
+	    			)
+	    		, dispatchError)
 	    }
 	    return updateCurrentState(rootDisaptch(SYNC, data))
 	}

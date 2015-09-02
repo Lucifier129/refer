@@ -4,7 +4,7 @@ let addItem = text => {
 	let date = new Date()
 	let time = date.getTime()
 	return {
-		id: time,
+		id: time + Math.random().toString(36).substr(2),
 		addTime: time,
 		updateTime: time,
 		diplayTime: date.toLocaleString(),
