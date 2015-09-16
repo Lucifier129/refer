@@ -3,9 +3,7 @@ import expect from 'expect'
 import handlers from './helper/handlers'
 import { ADD_ITEM, DELETE_ITEM, DELETE_ITEMS, UPDATE_ITEM, UPDATE_ITEMS } from './helper/constants'
 
-
-let { ERROR_KEY, LIFE_CYCLE } = constants
-let { WILL_UPDATE, DID_UPDATE, SHOULD_DISPATCH, SHOULD_UPDATE, THROW_ERROR } = LIFE_CYCLE
+let { WILL_UPDATE, DID_UPDATE, SHOULD_DISPATCH, SHOULD_UPDATE, THROW_ERROR } = constants
 
 let getStore = (...middlewares) => {
 	let rootHandlers = combineHandlers(...handlers.concat(middlewares))
@@ -182,22 +180,14 @@ describe('test createStore.js', () => {
 		})
 
 		it('should compose store without error', () => {
-			let rootHandler = {
-				add: value => {
-					console.log(value)
-					return value
-				},
-				reduce: value => {
-					console.log(value)
-					return value
-				}
-			}
+			let rootHandler = {}
 			let handler = {
 				add: x => state => state + x,
-				reduce: x => state => state - x
+				reduce: x => state => state - x,
+				[THROW_ERROR]: e => console.log(e)
 			}
 			let rootStore = createStore(createDispatch(combineHandlers(rootHandler, log)))
-			let store01 = createStore(createDispatch(combineHandlers(handler, log), 0))
+			let store01 = createStore(createDispatch(combineHandlers(handler, log)), 0)
 			let dispatch = rootStore.combine({
 				previous: count => count - 1,
 				current: count => count,

@@ -89,7 +89,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	}
 
 	let combine = (mapping, subDispatch) => (key, value) => {
-		return dispatch([mapping, merge], subDispatch(key, value))
+		return dispatch([prevValue => subDispatch(key, prevValue), mapping, merge], value)
 	}
 
 	return {
