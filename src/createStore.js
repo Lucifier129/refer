@@ -1,7 +1,5 @@
 import { isThenable, isFn, isObj } from './types'
-import { LIFE_CYCLE, ERROR_KEY } from './constants'
-
-let { 
+import { 
 	SHOULD_DISPATCH,
 	DISPATCH,
 	WILL_UPDATE,
@@ -11,11 +9,13 @@ let {
 	ASYNC_START,
 	ASYNC_END,
 	SYNC
-} = LIFE_CYCLE
+} from './constants'
+
+let merge = next => current => Object.assign({}, current, next)
 
 let createStore = (rootDisaptch, initialState = {}) => {
 	if (!isFn(rootDisaptch)) {
-		throw new Error(ERROR_KEY['004'])
+		throw new Error(`Expected the rootDisaptch to be a function which is ${ rootDisaptch }`)
 	}
 
 	let listeners = []
@@ -30,12 +30,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	}
 
 	let currentState = initialState
-	let getState = () => currentState
-	let getNextState = f => f(currentState)
 	let replaceState = nextState => {
-		if (!isObj(nextState)) {
-			throw new Error(ERROR_KEY['005'])
-		}
 		currentState = nextState
 		listeners.forEach(listener => listener())
 		return currentState
@@ -45,25 +40,24 @@ let createStore = (rootDisaptch, initialState = {}) => {
 			replaceState(data.nextState)
 			rootDisaptch(DID_UPDATE, data)
 		}
-		return currentState
 	}
-	let dispatchError = error => {
-		rootDisaptch(THROW_ERROR, error)
-		return currentState
-	}
+
+	let getState = () => currentState
+	let getNextState = f => f(currentState)
+	let dispatchError = error => rootDisaptch(THROW_ERROR, error)
 
 	let isDispatching = false
 	let dispatch = (key, value) => {
 		if (isDispatching) {
-			throw new Error(ERROR_KEY['006'])
+			throw new Error(`store.dispatch(key, value): handler may not dispatch`)
 		}
 
 		let currentData = { currentState, key, value }
+
+		rootDisaptch(DISPATCH, currentData)
 		if (rootDisaptch(SHOULD_DISPATCH, currentData) === false) {
 			return currentState
 		}
-
-		rootDisaptch(DISPATCH, currentData)
 		rootDisaptch(WILL_UPDATE, currentData)
 
 		let nextState
@@ -71,25 +65,36 @@ let createStore = (rootDisaptch, initialState = {}) => {
 			isDispatching = true
 			nextState = rootDisaptch([key, getNextState], value)
 		} catch(error) {
-	    	return dispatchError(error)
+	    	dispatchError(error)
+	    	return currentState
 	    } finally {
 	    	isDispatching = false
 	    }
 
 	    let data = { currentState, nextState, key, value }
 
-	    if (isThenable(nextState)) {
-	    	rootDisaptch(ASYNC_START, data)
-	    	return nextState.then(nextState =>
-	    		updateCurrentState(
-	    			rootDisaptch(ASYNC_END, { currentState, nextState, key, value })
-	    		), dispatchError)
+	    if (!isThenable(nextState)) {
+	    	updateCurrentState(data)
+	    	rootDisaptch(SYNC, data)
+	    	return currentState
 	    }
-	    return updateCurrentState(rootDisaptch(SYNC, data))
+
+	    rootDisaptch(ASYNC_START, data)
+	    return nextState.then(nextState => {
+	    	let data = { currentState, nextState, key, value }
+	    	updateCurrentState(data)
+	    	rootDisaptch(ASYNC_END, data)
+	    	return currentState
+	    }, dispatchError)
+	}
+
+	let combine = (mapping, subDispatch) => (key, value) => {
+		return dispatch([mapping, merge], subDispatch(key, value))
 	}
 
 	return {
 		dispatch,
+		combine,
 		getState,
 		replaceState,
 		subscribe

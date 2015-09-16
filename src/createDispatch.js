@@ -1,16 +1,15 @@
 import { isObj, isArr, isFn, isStr, isNum, isThenable } from './types'
-import { ERROR_KEY } from './constants'
 import mapValues from './mapValues'
 
 let createDispatche = table => {
 	if (!isObj(table)) {
-		throw new Error(ERROR_KEY['001'])
+		throw new Error(`createDispatche(table): Expected table to be an object which is ${ table }`)
 	}
 	let dispatch = (key, value) => {
 		let handler
 		switch (true) {
 		case key == null:
-			throw new Error(ERROR_KEY['002'])
+			throw new Error(`dispatch(key, value): Expected the key not to be null or undefined`)
 		case isFn(key) || isArr(key) || isThenable(key) || isObj(key):
 			handler = key
 			break

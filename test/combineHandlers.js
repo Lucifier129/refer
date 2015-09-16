@@ -1,4 +1,4 @@
-import { combineHandlers } from '../src'
+import { combineHandlers, createDispatch } from '../src'
 import expect from 'expect'
 
 describe('test combineHandlers.js', () => {
@@ -22,7 +22,8 @@ describe('test combineHandlers.js', () => {
 	}
 	
 	it('should combineHandlers and dispatch value without error', () => {
-		let dispatch = combineHandlers(part01, part02, part03)
+		let handlers = combineHandlers(part01, part02, part03)
+		let dispatch = createDispatch(handlers)
 		let result = dispatch('ADD_ITEM', 'test')
 		Object.keys(result).forEach(key => {
 			switch (key) {

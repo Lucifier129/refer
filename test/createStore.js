@@ -1,4 +1,4 @@
-import { combineHandlers, createStore, constants } from '../src'
+import { combineHandlers, createStore, createDispatch, constants } from '../src'
 import expect from 'expect'
 import handlers from './helper/handlers'
 import { ADD_ITEM, DELETE_ITEM, DELETE_ITEMS, UPDATE_ITEM, UPDATE_ITEMS } from './helper/constants'
@@ -8,12 +8,13 @@ let { ERROR_KEY, LIFE_CYCLE } = constants
 let { WILL_UPDATE, DID_UPDATE, SHOULD_DISPATCH, SHOULD_UPDATE, THROW_ERROR } = LIFE_CYCLE
 
 let getStore = (...middlewares) => {
-	let rootDispatch = combineHandlers(...handlers.concat(middlewares))
+	let rootHandlers = combineHandlers(...handlers.concat(middlewares))
+	let rootDispatch = createDispatch(rootHandlers)
 	let store = createStore(rootDispatch, { todos: []})
 	return store
 }
 
-let logger = {
+let log = {
 	[WILL_UPDATE]: ({ key, value }) => {
 		console.time(key)
 		console.log(`action ${ key } start, the value: ${ JSON.stringify(value) }`)
@@ -23,7 +24,7 @@ let logger = {
 	}
 }
 
-logger = {}
+let logger = {}
 
 let filter = {
 	[SHOULD_DISPATCH]: ({ key, value }) => {
@@ -178,6 +179,34 @@ describe('test createStore.js', () => {
 			}
 			let { dispatch, getState } = getStore(errorHandler)
 			dispatch('abc', 'abc is not the right action key')
+		})
+
+		it('should compose store without error', () => {
+			let rootHandler = {
+				add: value => {
+					console.log(value)
+					return value
+				},
+				reduce: value => {
+					console.log(value)
+					return value
+				}
+			}
+			let handler = {
+				add: x => state => state + x,
+				reduce: x => state => state - x
+			}
+			let rootStore = createStore(createDispatch(combineHandlers(rootHandler, log)))
+			let store01 = createStore(createDispatch(combineHandlers(handler, log), 0))
+			let dispatch = rootStore.combine({
+				previous: count => count - 1,
+				current: count => count,
+				next: count => count + 1
+			}, store01.dispatch)
+
+			dispatch('add', 9)
+
+			console.log(rootStore.getState(), store01.getState())
 		})
 	})
 })
