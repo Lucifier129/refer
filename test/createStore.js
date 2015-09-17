@@ -178,25 +178,5 @@ describe('test createStore.js', () => {
 			let { dispatch, getState } = getStore(errorHandler)
 			dispatch('abc', 'abc is not the right action key')
 		})
-
-		it('should compose store without error', () => {
-			let rootHandler = {}
-			let handler = {
-				add: x => state => state + x,
-				reduce: x => state => state - x,
-				[THROW_ERROR]: e => console.log(e)
-			}
-			let rootStore = createStore(createDispatch(combineHandlers(rootHandler, log)))
-			let store01 = createStore(createDispatch(combineHandlers(handler, log)), 0)
-			let dispatch = rootStore.combine({
-				previous: count => count - 1,
-				current: count => count,
-				next: count => count + 1
-			}, store01.dispatch)
-
-			dispatch('add', 9)
-
-			console.log(rootStore.getState(), store01.getState())
-		})
 	})
 })

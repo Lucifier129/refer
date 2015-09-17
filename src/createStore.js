@@ -1,4 +1,6 @@
-import { isThenable, isFn, isObj } from './types'
+import { isThenable, isFn, isObj, isArr } from './types'
+import combineHandlers from './combineHandlers'
+import createDispatch from './createDispatch'
 import { 
 	SHOULD_DISPATCH,
 	DISPATCH,
@@ -14,6 +16,13 @@ import {
 let merge = next => current => Object.assign({}, current, next)
 
 let createStore = (rootDisaptch, initialState = {}) => {
+
+	if (isArr(rootDisaptch)) {
+		rootDisaptch = createDispatch(combineHandlers(...rootDisaptch))
+	} else if (isObj(rootDisaptch)) {
+		rootDisaptch = createDispatch(rootDisaptch)
+	}
+
 	if (!isFn(rootDisaptch)) {
 		throw new Error(`Expected the rootDisaptch to be a function which is ${ rootDisaptch }`)
 	}
@@ -88,13 +97,8 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	    }, dispatchError)
 	}
 
-	let combine = (mapping, subDispatch) => (key, value) => {
-		return dispatch([prevValue => subDispatch(key, prevValue), mapping, merge], value)
-	}
-
 	return {
 		dispatch,
-		combine,
 		getState,
 		replaceState,
 		subscribe
