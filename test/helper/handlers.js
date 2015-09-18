@@ -1,6 +1,6 @@
 import { ADD_ITEM, DELETE_ITEM, DELETE_ITEMS, UPDATE_ITEM, UPDATE_ITEMS } from './constants'
 
-let addItem = text => {
+export let addItem = text => {
 	let date = new Date()
 	let time = date.getTime()
 	return {
@@ -13,7 +13,7 @@ let addItem = text => {
 	}
 }
 
-let updateItem = ({ id, ...other }, state) => {
+export let updateItem = ({ id, ...other }, state) => {
 	let date = new Date()
 	return state.map(item =>
 		item.id === id ?
@@ -25,7 +25,7 @@ let updateItem = ({ id, ...other }, state) => {
 	)
 }
 
-let filterItems = (query, state) => {
+export let filterItems = (query, state) => {
 	return state.filter(
 		item => Object.keys(query).some(key => item[key] !== query[key])
 	)

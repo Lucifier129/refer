@@ -1,7 +1,7 @@
 let combineDispatch = (rootDispatch, subDispatch) => (key, value) => {
-	return rootDispatch([() => subDispatch(key, value), key])
+	return rootDispatch([value => subDispatch(key, value), key], value)
 }
 
 export default (rootDispatch, ...subDispatches) => {
-	return subDispatches.reduce((left, right) => combineDispatch(left, right), rootDispatch)
+	return subDispatches.reduce(combineDispatch, rootDispatch)
 }

@@ -13,8 +13,6 @@ import {
 	SYNC
 } from './constants'
 
-let merge = next => current => Object.assign({}, current, next)
-
 let createStore = (rootDisaptch, initialState = {}) => {
 
 	if (isArr(rootDisaptch)) {
@@ -42,7 +40,6 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	let replaceState = nextState => {
 		currentState = nextState
 		listeners.forEach(listener => listener())
-		return currentState
 	}
 	let updateCurrentState = data => {
 		if (rootDisaptch(SHOULD_UPDATE, data) !== false) {
