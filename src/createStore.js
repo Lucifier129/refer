@@ -64,7 +64,6 @@ let createStore = (rootDisaptch, initialState = {}) => {
 		if (rootDisaptch(SHOULD_DISPATCH, currentData) === false) {
 			return currentState
 		}
-		rootDisaptch(WILL_UPDATE, currentData)
 
 		let nextState
 		try {
@@ -77,7 +76,13 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	    	isDispatching = false
 	    }
 
+	    if (nextState === currentState) {
+	    	return currentState
+	    }
+
 	    let data = { currentState, nextState, key, value }
+
+		rootDisaptch(WILL_UPDATE, data)
 
 	    if (!isThenable(nextState)) {
 	    	updateCurrentState(data)
@@ -91,7 +96,11 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	    	updateCurrentState(data)
 	    	rootDisaptch(ASYNC_END, data)
 	    	return currentState
-	    }, dispatchError)
+	    }, error => {
+	    	rootDisaptch(ASYNC_END, { currentState, key, value })
+	    	dispatchError(error)
+	    	return currentState
+	    })
 	}
 
 	return {

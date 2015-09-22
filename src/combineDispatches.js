@@ -1,5 +1,14 @@
+import { BUBBLE, SHOULD_BUBBLE } from './constants'
+
+let identical = () => state => state
+
 let combineDispatch = (rootDispatch, subDispatch) => (key, value) => {
-	return rootDispatch([value => subDispatch(key, value), key], value)
+	let oldState = subDispatch(identical)
+	let newState = subDispatch(key, value)
+	if (oldState !== newState) {
+		rootDispatch([BUBBLE, key], newState)
+	}
+	return newState
 }
 
 export default (rootDispatch, ...subDispatches) => {

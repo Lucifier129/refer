@@ -21,7 +21,7 @@ let createDispatche = table => {
 		case handler == null:
 			return value
 		case isFn(handler):
-			return handler(value)
+			return isThenable(value) ? value.then(handler) : handler(value)
 		case isStr(handler) || isNum(handler):
 			return dispatch(handler, value)
 		case isArr(handler):
