@@ -1,7 +1,7 @@
-import { createStore, logger } from 'refer'
+import { createStore, createLogger } from 'refer'
 import * as handler from './handler'
 
-let loggerOptions = {
+let options = {
 	scope: 'Input',
 	debug: true
 }

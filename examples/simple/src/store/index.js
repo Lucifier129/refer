@@ -1,12 +1,12 @@
-import { createStore, logger } from 'refer'
+import { createStore, createLogger } from 'refer'
 
 let handler = {
 	RECORD: source => state => Object.assign({}, state, source)
 }
 
-let loggerOptions = {
+let options = {
 	scope: 'Root',
 	debug: true
 }
 
-export default createStore([handler, logger(loggerOptions)], {})
+export default createStore([handler, createLogger(options)], {})

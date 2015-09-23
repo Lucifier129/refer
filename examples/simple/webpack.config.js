@@ -21,8 +21,7 @@ module.exports = {
     resolve: {
         extensions: ['', '.js'],
         alias: {
-            'refer': root + '/src/',
-            'react-refer': __dirname + '/src/helper'
+            'refer': root + '/src/'
         }
     }
 };

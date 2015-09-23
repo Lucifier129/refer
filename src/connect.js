@@ -1,7 +1,7 @@
-import { combineDispatches, types } from 'refer'
-let { isFn } = types
+import combineDispatches from './combineDispatches'
+import { isFn } from './types'
 
-export let connect = createStore => Component => {
+export default createStore => Component => {
 	return class Facade extends Component {
 		constructor(props, context) {
 			super(props, context)

@@ -1,8 +1,8 @@
-import { createStore, logger } from 'refer'
+import { createStore, createLogger } from 'refer'
 import * as handler from './handler'
 
-let loggerOptions = {
+let options = {
 	scope: 'Main',
 	debug: true
 }
-export default () => createStore([handler, logger(loggerOptions)])
+export default () => createStore([handler, createLogger(options)])

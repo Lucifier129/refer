@@ -1,17 +1,8 @@
-import createDispatch from './createDispatch'
-import createStore from './createStore'
-import combineHandlers from './combineHandlers'
-import combineDispatches from './combineDispatches'
-import constants from './constants'
-import logger from './logger'
-import * as types from './types'
-
-export {
-	logger,
-    createDispatch,
-    createStore,
-    combineHandlers,
-    combineDispatches,
-    constants,
-    types
-}
+export createDispatch from './createDispatch'
+export createStore from './createStore'
+export combineHandlers from './combineHandlers'
+export combineDispatches from './combineDispatches'
+export constants from './constants'
+export createLogger from './createLogger'
+export connect from './connect'
+export * as types from './types'

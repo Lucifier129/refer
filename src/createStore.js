@@ -50,7 +50,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 	let getState = () => currentState
 	let getNextState = f => f(currentState)
-	let dispatchError = error => rootDisaptch(THROW_ERROR, error)
+	let dispatchError = error => Promise.reject(rootDisaptch(THROW_ERROR, error))
 
 	let isDispatching = false
 	let dispatch = (key, value) => {
@@ -70,8 +70,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 			isDispatching = true
 			nextState = rootDisaptch([key, getNextState], value)
 		} catch(error) {
-	    	dispatchError(error)
-	    	return currentState
+	    	return dispatchError(error) // return Promise.reject
 	    } finally {
 	    	isDispatching = false
 	    }
@@ -96,10 +95,9 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	    	updateCurrentState(data)
 	    	rootDisaptch(ASYNC_END, data)
 	    	return currentState
-	    }, error => {
+	    }).catch(error => {
 	    	rootDisaptch(ASYNC_END, { currentState, key, value })
-	    	dispatchError(error)
-	    	return currentState
+	    	return dispatchError(error) // return Promise.reject
 	    })
 	}
 

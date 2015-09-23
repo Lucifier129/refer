@@ -8,8 +8,10 @@ let createDispatche = table => {
 	let dispatch = (key, value) => {
 		let handler
 		switch (true) {
-		case key == null:
-			throw new Error(`dispatch(key, value): Expected the key not to be null or undefined`)
+		case key === null:
+			return value
+		case key === undefined:
+			throw new Error(`dispatch(key, value): Expected the key not to be undefined`)
 		case isFn(key) || isArr(key) || isThenable(key) || isObj(key):
 			handler = key
 			break

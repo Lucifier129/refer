@@ -1,6 +1,6 @@
 import createStore from './store'
 import getView  from './view'
-import { connect } from 'react-refer'
+import { connect } from 'refer'
 import Input from '../input'
 
 let doConnect = times => {
@@ -11,4 +11,4 @@ let doConnect = times => {
 	return View
 }
 
-export default doConnect(110) //性能测试
+export default doConnect(100) //性能测试

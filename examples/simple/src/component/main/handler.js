@@ -6,5 +6,8 @@ export default {
 			...state,
 			main: main
 		}
+	},
+	'@BUBBLE': {
+		text: null
 	}
 }

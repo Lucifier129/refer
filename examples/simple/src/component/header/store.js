@@ -1,15 +1,15 @@
-import { createStore, logger } from 'refer'
+import { createStore, createLogger } from 'refer'
 import { record } from './action'
 
 let handler = {
 	RECORD: record
 }
 
-let loggerOptions = {
+let options = {
 	scope: 'Header',
 	debug: true
 }
 
-export default () => createStore([handler, logger(loggerOptions)], {
+export default () => createStore([handler, createLogger(options)], {
 	header: []
 })
