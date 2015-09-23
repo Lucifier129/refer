@@ -23,7 +23,6 @@ export default ({ scope, debug }) => {
 			console.time(getKey(key))
 		},
 		'@DID_UPDATE': (data) => {
-			console.count(getKey(key))
 			console.timeEnd(getKey(key))
 			let { key, value, currentState, nextState } = data
 			const time = new Date()

@@ -5,4 +5,4 @@ let loggerOptions = {
 	scope: 'Main',
 	debug: true
 }
-export default createStore([handler, logger(loggerOptions)])
+export default () => createStore([handler, logger(loggerOptions)])

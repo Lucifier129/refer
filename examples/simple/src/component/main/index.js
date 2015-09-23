@@ -1,5 +1,5 @@
-import store from './store'
+import createStore from './store'
 import View  from './view'
 import { connect } from 'react-refer'
 
-export default connect(store)(View)
+export default connect(createStore)(View)

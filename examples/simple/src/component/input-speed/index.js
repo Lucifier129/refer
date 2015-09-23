@@ -6,7 +6,7 @@ import Input from '../input'
 let doConnect = times => {
 	let View = Input
 	for (var i = 0; i < times; i++) {
-		View = connect(createStore())(getView(View))
+		View = connect(createStore)(getView(View))
 	}
 	return View
 }
