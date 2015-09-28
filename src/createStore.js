@@ -70,7 +70,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 			isDispatching = true
 			nextState = rootDisaptch([key, getNextState], value)
 		} catch(error) {
-	    	return dispatchError(error) // return Promise.reject
+	    	return dispatchError(error)
 	    } finally {
 	    	isDispatching = false
 	    }
@@ -82,7 +82,6 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	    let data = { currentState, nextState, key, value }
 
 		rootDisaptch(WILL_UPDATE, data)
-
 	    if (!isThenable(nextState)) {
 	    	updateCurrentState(data)
 	    	rootDisaptch(SYNC, data)
@@ -92,12 +91,12 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	    rootDisaptch(ASYNC_START, data)
 	    return nextState.then(nextState => {
 	    	let data = { currentState, nextState, key, value }
-	    	updateCurrentState(data)
 	    	rootDisaptch(ASYNC_END, data)
+	    	updateCurrentState(data)
 	    	return currentState
 	    }).catch(error => {
 	    	rootDisaptch(ASYNC_END, { currentState, key, value })
-	    	return dispatchError(error) // return Promise.reject
+	    	return dispatchError(error)
 	    })
 	}
 

@@ -12,11 +12,11 @@ let createDispatche = table => {
 			return value
 		case key === undefined:
 			throw new Error(`dispatch(key, value): Expected the key not to be undefined`)
-		case isFn(key) || isArr(key) || isThenable(key) || isObj(key):
-			handler = key
+		case isStr(key) || isNum(key):
+			handler = table[key]
 			break
 		default:
-			handler = table[key]
+			handler = key
 		}
 
 		switch (true) {

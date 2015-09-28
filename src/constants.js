@@ -1,5 +1,5 @@
 //life cycle key
-let LIFE_CYCLE = {
+export default {
 	DISPATCH: '@DISPATCH',
 	SHOULD_DISPATCH: '@SHOULD_DISPATCH',
 	WILL_UPDATE: '@WILL_UPDATE',
@@ -8,8 +8,5 @@ let LIFE_CYCLE = {
 	THROW_ERROR: '@THROW_ERROR',
 	ASYNC_START: '@ASYNC_START',
 	ASYNC_END: '@ASYNC_END',
-	SYNC: '@SYNC',
-	BUBBLE: '@BUBBLE'
+	SYNC: '@SYNC'
 }
-
-export default LIFE_CYCLE

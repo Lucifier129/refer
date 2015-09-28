@@ -27,13 +27,14 @@ export default ({ scope, debug }) => {
 			try {
 				console.groupEnd()
 			} catch (e) {
-				console.log('—— log end ——')
+				console.log('-- log end --')
 			}
 		},
-		'THROW_ERROR': error => {
+		'@THROW_ERROR': error => {
 			if (debug) {
 				throw error
 			}
+			return error
 		}
 	}
 	return logger

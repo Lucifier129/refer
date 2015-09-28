@@ -1,6 +1,6 @@
 {
   "name": "refer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "redux-like library for handling global state on functional style",
   "main": "dist/refer.js",
   "jsnext:main": "src/index.js",
