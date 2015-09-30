@@ -1,5 +1,6 @@
 import { isObj, isArr, isFn, isStr, isNum, isThenable } from './types'
 import mapValues from './mapValues'
+import { GET_TABLE } from './constants'
 
 let createDispatche = table => {
 	if (!isObj(table)) {
@@ -12,6 +13,8 @@ let createDispatche = table => {
 			return value
 		case key === undefined:
 			throw new Error(`dispatch(key, value): Expected the key not to be undefined`)
+		case key === GET_TABLE:
+			return table // special key to get table
 		case isStr(key) || isNum(key):
 			handler = table[key]
 			break

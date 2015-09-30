@@ -1,7 +1,9 @@
 import { isThenable, isFn, isObj, isArr } from './types'
 import combineHandlers from './combineHandlers'
 import createDispatch from './createDispatch'
+import mapValues from './mapValues'
 import { 
+	GET_TABLE,
 	SHOULD_DISPATCH,
 	DISPATCH,
 	WILL_UPDATE,
@@ -100,11 +102,16 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	    })
 	}
 
+	let createActions = obj => mapValues(obj, (_, key) => value => dispatch(key, value))
+	let actions = createActions(rootDisaptch(GET_TABLE))
+
 	return {
 		dispatch,
+		actions,
 		getState,
 		replaceState,
-		subscribe
+		subscribe,
+		createActions
 	}
 }
 

@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import Counter from '../component/Counter'
-import { dispatch, getState, subscribe } from '../store'
+import { getState, subscribe, actions } from '../store'
 
-let increment = () => dispatch('COUNT', 'INCREMENT')
-let decrement = () => dispatch('COUNT', 'DECREMENT')
-let incrementIfOdd = () => dispatch('COUNT', 'INCREMENT_IF_ODD')
+Component.prototype.actions = actions
 
 export default class App extends Component {
 	componentDidMount() {
@@ -14,10 +12,6 @@ export default class App extends Component {
 		this.unsubscribe()
 	}
 	render() {
-		return <Counter
-			increment={ increment }
-			decrement={ decrement }
-			incrementIfOdd={ incrementIfOdd }
-			count={getState()} />
+		return <Counter count={getState()} />
 	}
 }

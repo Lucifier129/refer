@@ -1,7 +1,7 @@
 const attr = 'info' in console ? 'info' : "log"
 const pad = num => ('0' + num).slice(-2)
 
-export default ({ scope, debug }) => {
+export default ({ scope="ROOT", debug }) => {
 	let logger = {
 		'@DISPATCH': () => console.time(scope),
 		'@DID_UPDATE': ({ key, value, currentState, nextState }) => {

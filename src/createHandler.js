@@ -20,7 +20,7 @@ let then = function(resolve, reject) {
 }
 
 let pipe = function(...args) {
-	this.push.apply(this, args)
+	this.push(...args)
 	return this
 }
 

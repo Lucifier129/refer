@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
 export default class Counter extends Component {
 	render() {
-		let { count, increment, decrement, incrementIfOdd } = this.props
+		let { COUNT } = this.actions
+		let { count } = this.props
 		return (
 			<div>
 				<span>count: { count }</span>
 				{' '}
-				<button onClick={ increment }>+</button>
+				<button onClick={ () => COUNT('INCREMENT') }>+</button>
 				{' '}
-				<button onClick={ decrement }>-</button>
+				<button onClick={ () => COUNT('DECREMENT') }>-</button>
 				{' '}
-				<button onClick={ incrementIfOdd }>incrementIfOdd</button>
+				<button onClick={ () => COUNT('INCREMENT_IF_ADD') }>incrementIfOdd</button>
 			</div>
 		)
 	}
