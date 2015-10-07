@@ -39,9 +39,11 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	}
 
 	let currentState = initialState
-	let replaceState = nextState => {
+	let replaceState = (nextState, silent) => {
 		currentState = nextState
-		listeners.forEach(listener => listener())
+		if (!silent) {
+			listeners.forEach(listener => listener())
+		}
 	}
 	let updateCurrentState = data => {
 		if (rootDisaptch(SHOULD_UPDATE, data) !== false) {
