@@ -12,8 +12,8 @@ const createLogger = ({ scope="ROOT", debug }) => {
 		'@DID_UPDATE': ({ key, value, currentState, nextState }) => {
 			const time = new Date()
 			const formattedTime = `${ time.getHours() }:${ pad(time.getMinutes()) }:${ pad(time.getSeconds()) }`
-			const cost = (getTime() - timeStore[scope]).toFixed(4)
-			const message = `action [${ key }] end at ${ formattedTime }, cost ${ cost }ms`
+			const takeTime = (getTime() - timeStore[scope]).toFixed(2)
+			const message = `${ scope }: action [${ key }] end at ${ formattedTime }, take ${ takeTime }ms`
 
 			try {
 				console.groupCollapsed(message)
