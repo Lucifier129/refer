@@ -5,7 +5,9 @@
  * @param {Function} fn The mapper function that receives the value and the key.
  * @returns {Object} A new object that contains the mapped values for the keys.
  */
-export default (obj, fn) => Object.keys(obj).reduce((result, key) => {
+let mapValues = (obj, fn) => Object.keys(obj).reduce((result, key) => {
 	result[key] = fn(obj[key], key)
 	return result
 }, {})
+
+export default mapValues

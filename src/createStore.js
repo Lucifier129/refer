@@ -47,6 +47,7 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	}
 	let updateCurrentState = data => {
 		if (rootDisaptch(SHOULD_UPDATE, data) !== false) {
+			rootDisaptch(WILL_UPDATE, data)
 			replaceState(data.nextState)
 			rootDisaptch(DID_UPDATE, data)
 		}
@@ -64,10 +65,11 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 		let currentData = { currentState, key, value }
 
-		rootDisaptch(DISPATCH, currentData)
 		if (rootDisaptch(SHOULD_DISPATCH, currentData) === false) {
 			return currentState
 		}
+
+		rootDisaptch(DISPATCH, currentData)
 
 		let nextState
 		try {
@@ -85,7 +87,6 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 	    let data = { currentState, nextState, key, value }
 
-		rootDisaptch(WILL_UPDATE, data)
 	    if (!isThenable(nextState)) {
 	    	updateCurrentState(data)
 	    	rootDisaptch(SYNC, data)

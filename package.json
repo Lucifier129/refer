@@ -1,20 +1,21 @@
 {
   "name": "refer",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "redux-like library for handling global state on functional style",
-  "main": "dist/refer.js",
+  "main": "lib/index.js",
   "jsnext:main": "src/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel/register --recursive",
     "test:watch": "npm test -- --watch",
+    "build:lib": "babel src --out-dir lib",
     "build:umd": "webpack src/index.js dist/refer.js --config webpack.config.development.js",
     "build:umd:min": "webpack src/index.js dist/refer.min.js --config webpack.config.production.js",
-    "build": "npm run build:umd && npm run build:umd:min",
+    "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
     "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Lucifier129/refer.git"
+    "url": "git+https://github.com/Lucifier129/refer.git"
   },
   "keywords": [
     "refer",
@@ -28,7 +29,11 @@
     "replay",
     "flux"
   ],
-  "author": "Jade Gu <guyingjie129@163.com> (https://github.com/Lucifier129)",
+  "author": {
+    "name": "Jade Gu",
+    "email": "guyingjie129@163.com",
+    "url": "https://github.com/Lucifier129"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Lucifier129/refer/issues"
@@ -51,5 +56,31 @@
         "*.js"
       ]
     }
-  ]
+  ],
+  "gitHead": "4cd0eb7041fe9847ec22dc814b17ca7906f22f58",
+  "_id": "refer@0.0.7",
+  "_shasum": "895841b3bf53ef2d565191eee1bcf33646a1e037",
+  "_from": "refer@0.0.7",
+  "_npmVersion": "2.11.3",
+  "_nodeVersion": "2.3.3",
+  "_npmUser": {
+    "name": "lucifier129",
+    "email": "guyingjie129@163.com"
+  },
+  "maintainers": [
+    {
+      "name": "lucifier129",
+      "email": "guyingjie129@163.com"
+    }
+  ],
+  "dist": {
+    "shasum": "895841b3bf53ef2d565191eee1bcf33646a1e037",
+    "size": 11216,
+    "noattachment": false,
+    "tarball": "http://registry.npm.taobao.org/refer/download/refer-0.0.7.tgz"
+  },
+  "directories": {},
+  "publish_time": 1444269158579,
+  "_cnpm_publish_time": 1444269158579,
+  "_resolved": "https://registry.npm.taobao.org/refer/download/refer-0.0.7.tgz"
 }

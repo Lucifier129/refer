@@ -1,6 +1,10 @@
 import createDispatch from './createDispatch'
+import { isArr } from './types'
 
-export default (...handlers) => handlers.reduce((rootHandler, handler) => {
+let combineHandlers = (...handlers) => handlers.reduce((rootHandler, handler) => {
+	if (isArr(handler)) {
+		handler = combineHandlers(handler)
+	}
 	let dispatch = createDispatch(handler)
 	return Object.keys(handler).reduce((rootHandler, key) => {
 		if (!rootHandler[key]) {
@@ -10,3 +14,5 @@ export default (...handlers) => handlers.reduce((rootHandler, handler) => {
 		return rootHandler
 	}, rootHandler)
 }, {})
+
+export default combineHandlers

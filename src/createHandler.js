@@ -24,9 +24,11 @@ let pipe = function(...args) {
 	return this
 }
 
-export default (...args) => {
+let createHandler = (...args) => {
 	let handler = [...args]
 	handler.then = then
 	handler.pipe = pipe
 	return handler
 }
+
+export default createHandler

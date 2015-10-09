@@ -1,14 +1,19 @@
 const attr = 'info' in console ? 'info' : "log"
 const pad = num => ('0' + num).slice(-2)
 
-export default ({ scope="ROOT", debug }) => {
-	let logger = {
-		'@DISPATCH': () => console.time(scope),
+const timeStore = {}
+const getTime = () => performance ? performance.now() : new Date().getTime()
+
+const createLogger = ({ scope="ROOT", debug }) => {
+	const logger = {
+		'@DISPATCH': () => {
+			timeStore[scope] = getTime()
+		},
 		'@DID_UPDATE': ({ key, value, currentState, nextState }) => {
-			console.timeEnd(scope)
 			const time = new Date()
-			const formattedTime = `${time.getHours()}:${pad(time.getMinutes())}:${pad(time.getSeconds())}`
-			const message = `action [${ key }] at ${ formattedTime }`
+			const formattedTime = `${ time.getHours() }:${ pad(time.getMinutes()) }:${ pad(time.getSeconds()) }`
+			const cost = (getTime() - timeStore[scope]).toFixed(4)
+			const message = `action [${ key }] end at ${ formattedTime }, cost ${ cost }ms`
 
 			try {
 				console.groupCollapsed(message)
@@ -39,3 +44,5 @@ export default ({ scope="ROOT", debug }) => {
 	}
 	return logger
 }
+
+export default createLogger
