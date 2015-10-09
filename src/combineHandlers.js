@@ -3,7 +3,7 @@ import { isArr } from './types'
 
 let combineHandlers = (...handlers) => handlers.reduce((rootHandler, handler) => {
 	if (isArr(handler)) {
-		handler = combineHandlers(handler)
+		handler = combineHandlers(...handler)
 	}
 	let dispatch = createDispatch(handler)
 	return Object.keys(handler).reduce((rootHandler, key) => {
