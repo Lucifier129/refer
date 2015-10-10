@@ -6,12 +6,14 @@ Component.prototype.actions = actions
 
 export default class App extends Component {
 	componentDidMount() {
+		console.log('app didMount')
 		this.unsubscribe = subscribe(() => this.forceUpdate())
+		debugger
 	}
 	componentWillUnmount() {
 		this.unsubscribe()
 	}
 	render() {
-		return <Counter count={getState()} />
+		return <Counter ref="counter" count={getState()} />
 	}
 }

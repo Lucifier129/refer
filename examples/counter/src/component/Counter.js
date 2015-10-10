@@ -27,6 +27,7 @@ export default class Counter extends Component {
 
 	}
 	componentDidMount() {
+		console.log('counter didMount')
 		// setTimeout(() => {
 		// 	console.log('forceUpdate_start')
 		// 	this.forceUpdate((...args) => console.log(args))
@@ -34,14 +35,14 @@ export default class Counter extends Component {
 		// }, 1000)
 	}
 	componentWillUnmount() {
-
+		debugger
 	}
 	render() {
 		let { COUNT } = this.actions
 		let { count } = this.props
 		return (
 			<div>
-				<span>count: { count }</span>
+				<span ref="counter">count: { count }</span>
 				{' '}
 				<button onClick={ () => COUNT('INCREMENT') }>+</button>
 				{' '}
