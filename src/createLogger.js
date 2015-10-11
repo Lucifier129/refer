@@ -2,7 +2,7 @@ const attr = 'info' in console ? 'info' : "log"
 const pad = num => ('0' + num).slice(-2)
 
 const timeStore = {}
-const getTime = () => performance ? performance.now() : new Date().getTime()
+const getTime = typeof performance !== 'undefined' ? () =>  performance.now() : () => new Date().getTime()
 
 const createLogger = ({ scope="ROOT", debug }) => {
 	const logger = {
