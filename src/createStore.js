@@ -96,8 +96,8 @@ let createStore = (rootDisaptch, initialState = {}) => {
 	    rootDisaptch(ASYNC_START, data)
 	    return nextState.then(nextState => {
 	    	let data = { currentState, nextState, key, value }
-	    	rootDisaptch(ASYNC_END, data)
 	    	updateCurrentState(data)
+	    	rootDisaptch(ASYNC_END, data)
 	    	return currentState
 	    }).catch(error => {
 	    	rootDisaptch(ASYNC_END, { currentState, key, value, error })
