@@ -1,8 +1,6 @@
 export createDispatch from './createDispatch'
 export createStore from './createStore'
-export createHandler from './createHandler'
 export combineHandlers from './combineHandlers'
 export constants from './constants'
-export createLogger from './createLogger'
 export mapValues from './mapValues'
 export * as types from './types'

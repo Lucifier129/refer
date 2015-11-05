@@ -12,6 +12,8 @@ export default class App extends Component {
 	}
 	componentDidUpdate() {
 		this;
+		// debugger
+		//console.log(this.refs.counter.refs.counter)
 		console.log('componentDidUpdate', 'app')
 	}
 	componentWillMount() {
@@ -22,6 +24,7 @@ export default class App extends Component {
 		//debugger
 	}
 	componentWillUnmount() {
+		console.log('app unmount')
 		this.unsubscribe()
 	}
 	render() {

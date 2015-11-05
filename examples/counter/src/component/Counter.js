@@ -36,7 +36,8 @@ export default class Counter extends Component {
 		// }, 1000)
 	}
 	componentWillUnmount() {
-		debugger
+		//debugger
+		console.log('counter unmount')
 	}
 	toNum(num, callback) {
 		cancelAnimationFrame(this.rid)
@@ -68,7 +69,7 @@ export default class Counter extends Component {
 		}
 		return (
 			<div>
-				<span ref={ count % 2 ? "counter" : null}>count: { count }</span>
+				<span ref={ count % 2 ? "counter" : null }>count: { count }</span>
 				{' '}
 				<button onClick={ () => COUNT('INCREMENT') }>+</button>
 				{' '}

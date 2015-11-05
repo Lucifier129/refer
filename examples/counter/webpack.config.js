@@ -21,7 +21,7 @@ module.exports = {
     resolve: {
         extensions: ['', '.js'],
         alias: {
-            'react': referDom,
+            //'react': referDom,
             'refer': root + '/src/'
         }
     }

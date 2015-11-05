@@ -1,6 +1,6 @@
 //life cycle key
 export default {
-	GET_TABLE: `@REFER_GET_TABLE_${ Math.random().toString(36).substr(2) }`,
+	GET_TABLE: '@REFER_GET_TABLE',
 	DISPATCH: '@DISPATCH',
 	SHOULD_DISPATCH: '@SHOULD_DISPATCH',
 	WILL_UPDATE: '@WILL_UPDATE',

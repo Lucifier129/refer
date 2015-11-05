@@ -1,8 +1,19 @@
 import React from 'react'
 import App from './container/App'
 
+class Facade extends App {
+	render() {
+		var data = super.render()
+		debugger
+		return data
+	}
+	componentWillMount() {
+		debugger
+	}
+}
+
 React.render(
-	<App />, 
+	<Facade />, 
 	document.getElementById('container')
 )
 
