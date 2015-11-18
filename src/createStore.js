@@ -2,7 +2,9 @@ import { isThenable, isFn, isObj, isArr } from './types'
 import combineHandlers from './combineHandlers'
 import createDispatch from './createDispatch'
 import mapValues from './mapValues'
-import { 
+import * as LIFE_CYCLE from './constants'
+
+const { 
 	GET_TABLE,
 	SHOULD_DISPATCH,
 	DISPATCH,
@@ -13,18 +15,18 @@ import {
 	ASYNC_START,
 	ASYNC_END,
 	SYNC
-} from './constants'
+} = LIFE_CYCLE
 
-let createStore = (rootDisaptch, initialState = {}) => {
+let createStore = (innerDispatch, initialState = {}) => {
 
-	if (isArr(rootDisaptch)) {
-		rootDisaptch = createDispatch(combineHandlers(...rootDisaptch))
-	} else if (isObj(rootDisaptch)) {
-		rootDisaptch = createDispatch(rootDisaptch)
+	if (isArr(innerDispatch)) {
+		innerDispatch = createDispatch(combineHandlers(...innerDispatch))
+	} else if (isObj(innerDispatch)) {
+		innerDispatch = createDispatch(innerDispatch)
 	}
 
-	if (!isFn(rootDisaptch)) {
-		throw new Error(`Expected the rootDisaptch to be a function which is ${ rootDisaptch }`)
+	if (!isFn(innerDispatch)) {
+		throw new Error(`Expected the innerDispatch to be a function which is ${ innerDispatch }`)
 	}
 
 	let listeners = []
@@ -46,16 +48,16 @@ let createStore = (rootDisaptch, initialState = {}) => {
 		}
 	}
 	let updateCurrentState = data => {
-		if (rootDisaptch(SHOULD_UPDATE, data) !== false) {
-			rootDisaptch(WILL_UPDATE, data)
+		if (innerDispatch(SHOULD_UPDATE, data) !== false) {
+			innerDispatch(WILL_UPDATE, data)
 			replaceState(data.nextState)
-			rootDisaptch(DID_UPDATE, data)
+			innerDispatch(DID_UPDATE, data)
 		}
 	}
 
 	let getState = () => currentState
 	let getNextState = f => f(currentState)
-	let dispatchError = error => Promise.reject(rootDisaptch(THROW_ERROR, error))
+	let dispatchError = error => Promise.reject(innerDispatch(THROW_ERROR, error))
 
 	let isDispatching = false
 	let dispatch = (key, value) => {
@@ -65,16 +67,16 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 		let currentData = { currentState, key, value }
 
-		if (rootDisaptch(SHOULD_DISPATCH, currentData) === false) {
+		if (innerDispatch(SHOULD_DISPATCH, currentData) === false) {
 			return currentState
 		}
 
-		rootDisaptch(DISPATCH, currentData)
+		innerDispatch(DISPATCH, currentData)
 
 		let nextState
 		try {
 			isDispatching = true
-			nextState = rootDisaptch([key, getNextState], value)
+			nextState = innerDispatch([key, getNextState], value)
 		} catch(error) {
 	    	return dispatchError(error)
 	    } finally {
@@ -89,24 +91,28 @@ let createStore = (rootDisaptch, initialState = {}) => {
 
 	    if (!isThenable(nextState)) {
 	    	updateCurrentState(data)
-	    	rootDisaptch(SYNC, data)
+	    	innerDispatch(SYNC, data)
 	    	return currentState
 	    }
 
-	    rootDisaptch(ASYNC_START, data)
+	    innerDispatch(ASYNC_START, data)
 	    return nextState.then(nextState => {
 	    	let data = { currentState, nextState, key, value }
 	    	updateCurrentState(data)
-	    	rootDisaptch(ASYNC_END, data)
+	    	innerDispatch(ASYNC_END, data)
 	    	return currentState
 	    }).catch(error => {
-	    	rootDisaptch(ASYNC_END, { currentState, key, value, error })
+	    	innerDispatch(ASYNC_END, { currentState, key, value, error })
 	    	return dispatchError(error)
 	    })
 	}
 
-	let createActions = obj => mapValues(obj, (_, key) => value => dispatch(key, value))
-	let actions = createActions(rootDisaptch(GET_TABLE))
+
+
+	let createActions = obj => mapValues(obj, (_, key) => value => 
+		LIFE_CYCLE.hasOwnProperty(key) ? innerDispatch(key, value) : dispatch(key, value)
+	)
+	let actions = createActions(innerDispatch(GET_TABLE))
 
 	return {
 		dispatch,

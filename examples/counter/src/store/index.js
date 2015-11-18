@@ -1,8 +1,6 @@
-import { createStore, createLogger } from 'refer'
+import { createStore } from 'refer'
 import * as handlers from '../handlers'
 
-let options = {
-	debug: true
-}
+let store = createStore(handlers, 0)
 
-export default createStore([handlers, createLogger(options)], 0)
+export default store

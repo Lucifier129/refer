@@ -13,4 +13,4 @@ let count = type => state => {
 	}
 }
 
-export default createHandler(count)
+export default count
