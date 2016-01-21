@@ -41,16 +41,16 @@ let createStore = (innerDispatch, initialState = {}) => {
 	}
 
 	let currentState = initialState
-	let replaceState = (nextState, silent) => {
+	let replaceState = (nextState, silent, ...args) => {
 		currentState = nextState
 		if (!silent) {
-			listeners.forEach(listener => listener())
+			listeners.forEach(listener => listener(...args))
 		}
 	}
 	let updateCurrentState = data => {
 		if (innerDispatch(SHOULD_UPDATE, data) !== false) {
 			innerDispatch(WILL_UPDATE, data)
-			replaceState(data.nextState)
+			replaceState(data.nextState, null, data)
 			innerDispatch(DID_UPDATE, data)
 		}
 	}
