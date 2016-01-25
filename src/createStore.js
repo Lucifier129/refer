@@ -76,9 +76,12 @@ let createStore = (innerDispatch, initialState = {}) => {
 		let isAsync = false
 		let getNextState = f => {
 			let nextState = f(currentState)
-			let data = { currentState, nextState, key, value }
-	    	updateCurrentState(data)
-	    	isAsync && innerDispatch(ASYNC_END, data)
+			let data
+			if (isAsync) {
+				data = { currentState, nextState, key, value }
+				updateCurrentState(data)
+				innerDispatch(ASYNC_END, data)
+			}
 	    	return nextState
 		}
 
