@@ -56,7 +56,6 @@ let createStore = (innerDispatch, initialState = {}) => {
 	}
 
 	let getState = () => currentState
-	let getNextState = f => f(currentState)
 	let dispatchError = error => Promise.reject(innerDispatch(THROW_ERROR, error))
 
 	let isDispatching = false
@@ -74,6 +73,15 @@ let createStore = (innerDispatch, initialState = {}) => {
 		innerDispatch(DISPATCH, currentData)
 
 		let nextState
+		let isAsync = false
+		let getNextState = f => {
+			let nextState = f(currentState)
+			let data = { currentState, nextState, key, value }
+	    	updateCurrentState(data)
+	    	isAsync && innerDispatch(ASYNC_END, data)
+	    	return nextState
+		}
+
 		try {
 			isDispatching = true
 			nextState = innerDispatch([key, getNextState], value)
@@ -96,12 +104,8 @@ let createStore = (innerDispatch, initialState = {}) => {
 	    }
 
 	    innerDispatch(ASYNC_START, data)
-	    return nextState.then(nextState => {
-	    	let data = { currentState, nextState, key, value }
-	    	updateCurrentState(data)
-	    	innerDispatch(ASYNC_END, data)
-	    	return currentState
-	    }).catch(error => {
+	    isAsync = true
+	    return nextState.catch(error => {
 	    	innerDispatch(ASYNC_END, { currentState, key, value, error })
 	    	return dispatchError(error)
 	    })
